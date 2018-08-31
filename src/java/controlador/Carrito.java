@@ -93,6 +93,7 @@ public class Carrito extends ActionSupport implements ModelDriven<Items> {
     
     
     public String add_to_cart() {
+        System.out.println(items.getIditem());
         esRepetido = false;
         try {
             listaItems = (List<DetalleCompra>) session.getAttribute("listaItems");
@@ -166,6 +167,7 @@ public class Carrito extends ActionSupport implements ModelDriven<Items> {
                 session.setAttribute("cantidad", cantidad);
                 session.setAttribute("elementos", elementos);
                 session.setAttribute("cantidadSer", cantidadSer);
+                System.out.println("terminar");
             }
             return SUCCESS;
         } catch (SQLException e) {

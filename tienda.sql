@@ -31,8 +31,8 @@ create table usuarios(
  idperfil int not null default 2
 );
 
-insert into usuarios values('yomaadmin','123456','Yamara','','Ronquillo','','ym@gmail.com','jpg','SAN JUAN','1234567890',1);
-insert into usuarios values('yomauser','123456','Yamara','','Ronquillo','','y3m@gmail.com','jpg','SAN JUAN','1234567890',2);
+insert into usuarios values('admin','123456','Admin','','Admin','','ym@gmail.com','jpg','BABAHOYO','1234567890',1);
+insert into usuarios values('user','123456','User','','user','','y3m@gmail.com','jpg','BABAHOYO','1234567890',2);
 
 
 
