@@ -16,7 +16,10 @@ public class Imagenes implements Serializable{
     private int idimagen;
     private String nombre;
     private int iditem;
-
+    
+    
+    
+    
     public int getIdimagen() {
         return idimagen;
     }

@@ -63,46 +63,51 @@
                 <s:property value="item.nombre"/>
             </span>
         </div>
+        <form action="actproducto" method="post" >
+            <!-- Product Detail -->
+            <div class="container bgwhite p-t-35 p-b-80">
+                <div class="flex-w flex-sb">
+                    <div class="w-size13 p-t-30 respon5">
+                        <div class="wrap-slick3 flex-sb flex-w">
+                            <div class="wrap-slick3-dots"></div>
 
-        <!-- Product Detail -->
-        <div class="container bgwhite p-t-35 p-b-80">
-            <div class="flex-w flex-sb">
-                <div class="w-size13 p-t-30 respon5">
-                    <div class="wrap-slick3 flex-sb flex-w">
-                        <div class="wrap-slick3-dots"></div>
-
-                        <div class="slick3">
-
-
-                            <div class="item-slick3" data-thumb="images/<s:property value="item.imagen"/>">
-                                <div class="wrap-pic-w">
-                                    <img src="images/<s:property value="item.imagen"/>" alt="IMG-PRODUCT">
+                            <div class="slick3">
+                                <div class="item-slick3" data-thumb="images/<s:property value="item.imagen"/>">
+                                    <div class="wrap-pic-w">
+                                        <img src="images/<s:property value="item.imagen"/>" alt="IMG-PRODUCT">
+                                    </div>
                                 </div>
+                                <s:iterator value="listaImagenes" begin="1">
+                                    <div class="item-slick3" data-thumb="images/<s:property value="nombre"/>">
+                                        <div class="wrap-pic-w">
+                                            <img src="images/<s:property value="nombre"/>" alt="IMG-PRODUCT">
+                                        </div>
+                                    </div>
+                                </s:iterator>
+
+
                             </div>
-
-
                         </div>
                     </div>
-                </div>
-                <s:set name="mensaje"><s:property value="mensaje"/></s:set>
-                <s:if test="#mensaje!=''">
-                    <div class="alert alert-success "   role="alert" id="nus">
-                        <a id="linkClose" href="#" class="close" data-dismiss="alert" aria-label="Close">
-                            &times;
-                        </a>
-                        <strong>¡Éxito!</strong> <s:property value="mensaje"/>.
-                    </div>
-                </s:if>
-                <form action="actproducto" method="post" >
+                    <s:set name="mensaje"><s:property value="mensaje"/></s:set>
+                    <s:if test="#mensaje!=''">
+                        <div class="alert alert-success "   role="alert" id="nus">
+                            <a id="linkClose" href="#" class="close" data-dismiss="alert" aria-label="Close">
+                                &times;
+                            </a>
+                            <strong>¡Éxito!</strong> <s:property value="mensaje"/>.
+                        </div>
+                    </s:if>
+
 
                     <input type="hidden" value="<s:property value="item.iditem"/>" name="iditem"/>
                     <div class="w-size14 p-t-30 respon5">
                         <h4 class="product-detail-name m-text16 p-b-13">
-                            <input type="text"  value="<s:property value="item.nombre"/>"name="nombre"/>
+                            <input type="text" class="border border-dark" value="<s:property value="item.nombre"/>"name="nombre"/>
                         </h4>
 
                         <span class="m-text17">
-                            <input type="text" value=" <s:property value="item.precio"/> " name="precio">                   
+                            <input type="text"  class="border border-dark" value=" <s:property value="item.precio"/> " name="precio">                   
                         </span>
 
                         <p class="s-text8 p-t-10">
@@ -166,10 +171,11 @@
                             </div>
                         </div>                     
                     </div>
-                </form>
-            </div>
-        </div>
 
+                </div>
+            </div>
+
+        </form>
         <!-- Relate Product -->
 
 

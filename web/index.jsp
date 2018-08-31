@@ -51,11 +51,11 @@
                     <div class="item-slick1 item1-slick1" style="background-image: url(images/master-slide-02.jpg);">
                         <div class="wrap-content-slide1 sizefull flex-col-c-m p-l-15 p-r-15 p-t-150 p-b-170">
                             <span class="caption1-slide1 m-text1 t-center animated visible-false m-b-15" data-appear="fadeInDown">
-                                Habilataciones
+                                Prendas
                             </span>
 
                             <h2 class="caption2-slide1 xl-text1 t-center animated visible-false m-b-37" data-appear="fadeInUp">
-                                Modernas
+                                a la moda
                             </h2>
 
                             <div class="wrap-btn-slide1 w-size1 animated visible-false" data-appear="zoomIn">
@@ -67,11 +67,11 @@
                     <div class="item-slick1 item2-slick1" style="background-image: url(images/master-slide-03.jpg);">
                         <div class="wrap-content-slide1 sizefull flex-col-c-m p-l-15 p-r-15 p-t-150 p-b-170">
                             <span class="caption1-slide1 m-text1 t-center animated visible-false m-b-15" data-appear="rollIn">
-                                Habilataciones
+                                Prendas
                             </span>
 
                             <h2 class="caption2-slide1 xl-text1 t-center animated visible-false m-b-37" data-appear="lightSpeedIn">
-                                  Modernas
+                                  a la moda
                             </h2>
 
                             <div class="wrap-btn-slide1 w-size1 animated visible-false" data-appear="slideInUp">
@@ -84,11 +84,11 @@
                     <div class="item-slick1 item3-slick1" style="background-image: url(images/master-slide-04.jpg);">
                         <div class="wrap-content-slide1 sizefull flex-col-c-m p-l-15 p-r-15 p-t-150 p-b-170">
                             <span class="caption1-slide1 m-text1 t-center animated visible-false m-b-15" data-appear="rotateInDownLeft">
-                                Habilataciones
+                                Prendas
                             </span>
 
                             <h2 class="caption2-slide1 xl-text1 t-center animated visible-false m-b-37" data-appear="rotateInUpRight">
-                                  Modernas
+                                  a la moda
                             </h2>
 
                             <div class="wrap-btn-slide1 w-size1 animated visible-false" data-appear="rotateIn">
@@ -103,7 +103,7 @@
         </section>
 
         <!-- Banner -->
-        <section class="banner bgwhite p-t-40 p-b-40">
+          <section class="banner bgwhite p-t-40 p-b-40">
             <div class="container">
                 <div class="row">
                     <div class="col-sm-10 col-md-8 col-lg-4 m-l-r-auto">
@@ -113,7 +113,9 @@
 
                             <div class="block1-wrapbtn w-size2">
                                 <!-- Button -->
-                                 
+                                <a href="#" class="flex-c-m size2 m-text2 bg3 hov1 trans-0-4">
+                                    Vestidos
+                                </a>
                             </div>
                         </div>
 
@@ -124,7 +126,7 @@
                             <div class="block1-wrapbtn w-size2">
                                 <!-- Button -->
                                 <a href="#" class="flex-c-m size2 m-text2 bg3 hov1 trans-0-4">
-                                    Matrimoniales
+                                    Accesorios
                                 </a>
                             </div>
                         </div>
@@ -137,7 +139,7 @@
                             <div class="block1-wrapbtn w-size2">
                                 <!-- Button -->
                                 <a href="#" class="flex-c-m size2 m-text2 bg3 hov1 trans-0-4">
-                                    Modernas
+                                    Blusas
                                 </a>
                             </div>
                         </div>
@@ -151,7 +153,7 @@
                                 <div class="block1-wrapbtn w-size2">
                                     <!-- Button -->
                                     <a href="#" class="flex-c-m size2 m-text2 bg3 hov1 trans-0-4">
-                                        Esconómicas
+                                        Pantalones
                                     </a>
                                 </div>
                             </div>
@@ -166,7 +168,7 @@
                             <div class="block1-wrapbtn w-size2">
                                 <!-- Button -->
                                 <a href="#" class="flex-c-m size2 m-text2 bg3 hov1 trans-0-4">
-                                    Jackussi
+                                    Bolsos
                                 </a>
                             </div>
                         </div>
@@ -180,7 +182,7 @@
                             <div class="block1-wrapbtn w-size2">
                                 <!-- Button -->
                                 <a href="#" class="flex-c-m size2 m-text2 bg3 hov1 trans-0-4">
-                                    Grandes
+                                    Calzado
                                 </a>
                             </div>
                         </div>

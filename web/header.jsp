@@ -22,11 +22,11 @@
         <s:url action="tienda" var="pro" >
             <s:param name="page">1</s:param>
         </s:url>
-        <s:url action="actu" var="actu" includeParams="none">
-            <s:param name="">
-                <s:property value="#user.nombreusuario"/>
-            </s:param>
-        </s:url>
+        <meta url="<s:url action="actu" var="actu" includeParams="none" >
+                  <s:param name="">
+                      <s:property value="#user.nombreusuario"/>
+                  </s:param>
+              </s:url>/">
 
 
         <header class="header1">
@@ -47,11 +47,18 @@
                             <ul class="main_menu">
                                 <li>
                                     <a href="<s:property value="#index"/>">Inicio</a>
-
                                 </li>
 
                                 <li>
-                                    <a href="<s:property value="#pro"/>">Habitaciones</a>
+                                    <a href="<s:property value="#pro"/>">Productos</a>
+                                    <s:if test="#user!=null">
+                                        
+                                            <s:if test="#user.idperfil==1"><ul class="sub_menu">
+                                                <s:url action="categorias" var="cat"/>
+                                                <li><s:a href="%{cat}">Agregar producto</s:a></li>
+                                               
+                                          
+                                    </ul>  </s:if> </s:if>
                                 </li>
 
 
@@ -61,12 +68,12 @@
                                     </li>
                                     <s:if test="#user.idperfil==1">
                                         <li>
-                                            <a href=" <s:property value="#reservas"/>">Ver reservas de todos</a>
+                                            <a href=" <s:property value="#reservas"/>">Ver compras de todos</a>
                                         </li>
                                     </s:if>
                                     <s:else>
                                         <li>
-                                            <a href=" <s:property value="#reservas1"/>">Ver reservas</a>
+                                            <a href=" <s:property value="#reservas1"/>">Ver compras</a>
                                         </li>
 
                                     </s:else>

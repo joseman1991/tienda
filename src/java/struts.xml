@@ -24,6 +24,11 @@
             <result name="error"> error.jsp</result>            
         </action> 
         
+        <action name="categorias" class="controlador.CategoriasAction" method="obtenerCategorias">
+            <result name="success"> agg_producto.jsp</result>
+            <result name="error"> error.jsp</result>            
+        </action> 
+        
         <action name="Inicio" class="controlador.UsuarioAction" method="login">
             <result name="success">   
                 index.jsp   
@@ -50,8 +55,19 @@
             <result name="error"> error.jsp</result>            
         </action>  
         
+        <action name="insertProducto" class="controlador.Producto" method="insertarProducto">
+            <result name="success" type="redirectAction">
+                 <param name="actionName">categorias</param>
+                <param name="mensaje">${mensaje}</param>
+                </result>
+            <result name="error"> error.jsp</result>            
+        </action>  
+        
         <action name="actproducto" class="controlador.Producto" method="actualizarProducto">
-            <result name="success">product-detail.jsp</result>
+            <result name="success" type="redirectAction">
+                <param name="actionName">act</param>
+                <param name="producto">${producto}</param>                 
+            </result>
             <result name="error"> error.jsp</result>            
         </action>  
         
@@ -62,8 +78,9 @@
         
         <action name="eliproducto" class="controlador.Producto" method="eliminarProducto">
             <result name="success" type="redirectAction">
+                  <param name="actionName">tienda</param>
                 <param name="mensaje">${mensaje}</param>
-                tienda</result>
+                </result>
             <result name="error"> error.jsp</result>            
         </action>  
         

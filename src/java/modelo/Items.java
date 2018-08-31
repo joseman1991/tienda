@@ -5,13 +5,16 @@
  */
 package modelo;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
 
 /**
  *
  * @author JOSE
  */
-public class Items implements Serializable{
+public class Items implements Serializable {
 
     private int iditem;
     private int stock;
@@ -22,22 +25,37 @@ public class Items implements Serializable{
     private float descuento;
     private int idtipo;
     private int idcategorias;
-    private Categorias categorias;
+    private final Categorias categorias;
     private float iva;
     private float rate;
     private String imagen;
+    private File[] imagenes;
+    private String[] imagenesFileName;
+    private String[] imagenesContentType;
+    private FileInputStream[] images;
+    private long[] longitudByte;
 
     public Items() {
-        nombre="";
-        descripcion="";
-        descripcion2="";
-        imagen="";
-        categorias= new Categorias();
+        nombre = "";
+        descripcion = "";
+        descripcion2 = "";
+        imagen = "";
+        categorias = new Categorias();
     }
 
-    
-    
-    
+    public FileInputStream[] getImages() {
+        try {
+            images=new FileInputStream[imagenes.length];
+            for (int i = 0; i < imagenes.length; i++) {
+                File img = imagenes[i];
+                images[i] = new FileInputStream(img);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        return images;
+    }
+
     public int getIditem() {
         return iditem;
     }
@@ -68,7 +86,7 @@ public class Items implements Serializable{
 
     public void setDescripcion2(String descripcion2) {
         this.descripcion2 = descripcion2;
-    }    
+    }
 
     public float getPrecio() {
         return precio;
@@ -78,6 +96,18 @@ public class Items implements Serializable{
         this.precio = precio;
     }
 
+    public long[] getLongitudByte() {
+        longitudByte= new long[imagenes.length];
+        for (int i = 0; i < imagenes.length; i++) {
+            File imagene = imagenes[i];
+            longitudByte[i]=  imagene.length();
+        }
+        return longitudByte;
+    }
+
+    
+    
+    
     public float getDescuento() {
         return descuento;
     }
@@ -100,7 +130,7 @@ public class Items implements Serializable{
 
     public void setIdcategorias(int idcategorias) {
         this.idcategorias = idcategorias;
-    }  
+    }
 
     public float getIva() {
         return iva;
@@ -140,18 +170,35 @@ public class Items implements Serializable{
 
     public Categorias getCategorias() {
         return categorias;
-    } 
+    }
 
-    public void setCategorias(Categorias categorias) {
-        this.categorias = categorias;
+    public String[] getImagenesContentType() {
+        return imagenesContentType;
     }
-    
-    
-    public String getDesc(){
-        float f=precio*descuento/100;
-        return  String.format("%.2f", f);
+
+    public void setImagenesContentType(String[] imagenesContentType) {
+        this.imagenesContentType = imagenesContentType;
     }
-    
-    
+
+    public String getDesc() {
+        float f = precio * descuento / 100;
+        return String.format("%.2f", f);
+    }
+
+    public File[] getImagenes() {
+        return imagenes;
+    }
+
+    public void setImagenes(File[] imagenes) {
+        this.imagenes = imagenes;
+    }
+
+    public String[] getImagenesFileName() {
+        return imagenesFileName;
+    }
+
+    public void setImagenesFileName(String[] imagenesFileName) {
+        this.imagenesFileName = imagenesFileName;
+    }
 
 }

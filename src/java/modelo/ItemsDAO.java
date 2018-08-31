@@ -5,6 +5,8 @@
  */
 package modelo;
 
+import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -35,17 +37,64 @@ public class ItemsDAO extends ConexionMySQL {
         sentencia.setFloat(4, item.getPrecio());
         sentencia.setInt(5, item.getStock());
         sentencia.setInt(6, item.getIditem());
-        re=sentencia.executeUpdate();
+        re = sentencia.executeUpdate();
         cerrarConexion();
         return re;
     }
 
-    public int eliminarProducto(Items item) throws SQLException {
+    public int insertarProducto(Items item, Connection conexion) throws SQLException, IOException {
         int re = 0;
+        sentencia = conexion.prepareStatement("insert into items "
+                + "   (nombre, descripcion,idcategorias, descripcion2, precio,  stock)"
+                + " values (?,?,?,?,?,?)");
+        sentencia.setString(1, item.getNombre());
+        sentencia.setString(2, item.getDescripcion());
+        sentencia.setInt(3, item.getIdcategorias());
+        sentencia.setString(4, item.getDescripcion2());
+        sentencia.setFloat(5, item.getPrecio());
+        sentencia.setInt(6, item.getStock());       
+        re = sentencia.executeUpdate();
+        sentencia = conexion.prepareStatement("select last_insert_id()");
+        resultado = sentencia.executeQuery();
+        if (resultado.next()) {
+            re = resultado.getInt(1);
+            item.setIditem(re);
+        }
+        sentencia=conexion.prepareStatement("update items set imagen=? where iditem=?");
+         String nombre = "imagen_no_disponible.jpg";
+        String[] c = item.getImagenesContentType();
+        String[] n = item.getImagenesFileName();
+        if (c != null) {
+            nombre = re + "_1";
+            String e = c[0];
+            switch (e) {
+                case "image/png":
+                    nombre += ".png";
+                    break;
+
+                case "image/jpg":
+                    nombre += ".jpg";
+                    break;
+
+                case "image/jpeg":
+                    nombre += ".jpeg";
+                    break;
+            }
+        }
+        sentencia.setString(1, nombre);
+        sentencia.setInt(2, re);
+        sentencia.executeUpdate();
+        ImagenesDAO img = new ImagenesDAO();
+        img.insertarImagenes(item, conexion);
+        return re;
+    }
+
+    public int eliminarProducto(Items item) throws SQLException {
+        int re;
         abrirConexion();
-        sentencia = conexion.prepareStatement("delete from items WHERE iditem=?");        
+        sentencia = conexion.prepareStatement("delete from items WHERE iditem=?");
         sentencia.setInt(1, item.getIditem());
-        re=sentencia.executeUpdate();
+        re = sentencia.executeUpdate();
         cerrarConexion();
         return re;
     }
@@ -141,7 +190,9 @@ public class ItemsDAO extends ConexionMySQL {
             c.setIdtipo(resultado.getInt(7));
             c.setIdcategorias(resultado.getInt(8));
             Categorias ca = new CategoriasDAO().obtenerCategoria(resultado.getInt(8));
-            c.setCategorias(ca);
+
+            c.getCategorias().setCategorias(ca.getCategorias());
+            c.getCategorias().setDescripcion(ca.getDescripcion());
             c.setImagen(resultado.getString(9));
             c.setStock(resultado.getInt(10));
             c.setRate(resultado.getFloat(11));

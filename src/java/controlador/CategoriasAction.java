@@ -76,6 +76,10 @@ public class CategoriasAction extends ActionSupport {
     public void setPage(int page) {
         this.page = page;
     }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
     
     
     
