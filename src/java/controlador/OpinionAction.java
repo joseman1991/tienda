@@ -25,9 +25,9 @@ public class OpinionAction extends ActionSupport implements ModelDriven<Opinion>
     private Opinion opinion;
     private final OpinionDAO odao;
     private int producto;
-
+ 
     
-    
+     
     public OpinionAction() {
         opinion= new Opinion();
         this.listOpiniones = new ArrayList<>();

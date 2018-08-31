@@ -249,7 +249,7 @@
                         "items": {
                             "iditem": iditem.val()
                         }};
-
+                     
 
                     $.ajax({
                         url: "add_to_cart",
@@ -279,7 +279,7 @@
 
                         }
                     });
-                    swal(nameProduct, "is added to cart !", "success");
+                    swal(nameProduct, "Añadido al carrito !", "success");
                 });
 
 
@@ -300,8 +300,8 @@
                             contentType: 'application/json',
                             type: 'POST',
                             async: true,
-                            success: function (res) {                                
-                                 cart.html(res.cantidad);
+                            success: function (res) {
+                                cart.html(res.cantidad);
                                 boton.css("display", "none");
                                 boton2.css("display", "block");
                             }
