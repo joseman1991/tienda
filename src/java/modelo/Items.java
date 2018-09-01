@@ -44,14 +44,17 @@ public class Items implements Serializable {
     }
 
     public FileInputStream[] getImages() {
-        try {
-            images=new FileInputStream[imagenes.length];
-            for (int i = 0; i < imagenes.length; i++) {
-                File img = imagenes[i];
-                images[i] = new FileInputStream(img);
+
+        if (imagenes != null) {
+            try {
+                images = new FileInputStream[imagenes.length];
+                for (int i = 0; i < imagenes.length; i++) {
+                    File img = imagenes[i];
+                    images[i] = new FileInputStream(img);
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println(e.getMessage());
             }
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
         }
         return images;
     }
@@ -97,17 +100,16 @@ public class Items implements Serializable {
     }
 
     public long[] getLongitudByte() {
-        longitudByte= new long[imagenes.length];
-        for (int i = 0; i < imagenes.length; i++) {
-            File imagene = imagenes[i];
-            longitudByte[i]=  imagene.length();
+        if (imagenes != null) {
+            longitudByte = new long[imagenes.length];
+            for (int i = 0; i < imagenes.length; i++) {
+                File imagene = imagenes[i];
+                longitudByte[i] = imagene.length();
+            }
         }
         return longitudByte;
     }
 
-    
-    
-    
     public float getDescuento() {
         return descuento;
     }

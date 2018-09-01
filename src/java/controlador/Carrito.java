@@ -107,7 +107,7 @@ public class Carrito extends ActionSupport implements ModelDriven<Items> {
                 }
                 ItemsDAO idao = new ItemsDAO();
                 items = idao.obtenerItem(items.getIditem());
-                JSonItems = JSonParser.toJson(items);
+//                JSonItems = JSonParser.toJson(items);
                 cantidad = 0;
                 elementos = 0;
                 cantidadSer = 0;
