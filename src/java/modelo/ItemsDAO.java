@@ -45,14 +45,16 @@ public class ItemsDAO extends ConexionMySQL {
     public int insertarProducto(Items item, Connection conexion) throws SQLException, IOException {
         int re = 0;
         sentencia = conexion.prepareStatement("insert into items "
-                + "   (nombre, descripcion,idcategorias, descripcion2, precio,  stock)"
-                + " values (?,?,?,?,?,?)");
+                + "   (nombre, descripcion,idcategorias, descripcion2, precio,  stock,nombreusuario)"
+                + " values (?,?,?,?,?,?,?)");
         sentencia.setString(1, item.getNombre());
         sentencia.setString(2, item.getDescripcion());
         sentencia.setInt(3, item.getIdcategorias());
         sentencia.setString(4, item.getDescripcion2());
         sentencia.setFloat(5, item.getPrecio());
-        sentencia.setInt(6, item.getStock());       
+        sentencia.setInt(6, item.getStock());
+        sentencia.setString(7, item.getNombreusuario());
+
         re = sentencia.executeUpdate();
         sentencia = conexion.prepareStatement("select last_insert_id()");
         resultado = sentencia.executeQuery();
@@ -60,8 +62,8 @@ public class ItemsDAO extends ConexionMySQL {
             re = resultado.getInt(1);
             item.setIditem(re);
         }
-        sentencia=conexion.prepareStatement("update items set imagen=? where iditem=?");
-         String nombre = "imagen_no_disponible.jpg";
+        sentencia = conexion.prepareStatement("update items set imagen=? where iditem=?");
+        String nombre = "imagen_no_disponible.jpg";
         String[] c = item.getImagenesContentType();
         String[] n = item.getImagenesFileName();
         if (c != null) {
@@ -123,12 +125,65 @@ public class ItemsDAO extends ConexionMySQL {
         cerrarConexion();
     }
 
+    public void obtenerItems(int id, String busca, String nombreu) throws SQLException {
+        listaItems.clear();
+        abrirConexion();
+        sentencia = conexion.prepareStatement("select * from items where idtipo=? and nombre like ? and nombreusuario=?  order by idcategorias");
+        sentencia.setInt(1, id);
+        sentencia.setString(2, busca + "%");
+        sentencia.setString(3, nombreu);
+        resultado = sentencia.executeQuery();
+        while (resultado.next()) {
+            Items c = new Items();
+            c.setIditem(resultado.getInt(1));
+            c.setNombre(resultado.getString(2));
+            c.setDescripcion(resultado.getString(3));
+            c.setDescripcion2(resultado.getString(4));
+            c.setPrecio(resultado.getFloat(5));
+            c.setDescuento(resultado.getFloat(6));
+            c.setIdtipo(resultado.getInt(7));
+            c.setIdcategorias(resultado.getInt(8));
+            c.setImagen(resultado.getString(9));
+            c.setStock(resultado.getInt(10));
+            c.setRate(resultado.getFloat(11));
+            listaItems.add(c);
+        }
+        cerrarConexion();
+    }
+
+    public void obtenerItems2(int id, String busca, String nombreu) throws SQLException {
+        listaItems.clear();
+        abrirConexion();
+        sentencia = conexion.prepareStatement("select * from items where idtipo=? and nombre like ? and nombreusuario<>?  order by idcategorias");
+        sentencia.setInt(1, id);
+        sentencia.setString(2, busca + "%");
+        sentencia.setString(3, nombreu);
+        resultado = sentencia.executeQuery();
+        while (resultado.next()) {
+            Items c = new Items();
+            c.setIditem(resultado.getInt(1));
+            c.setNombre(resultado.getString(2));
+            c.setDescripcion(resultado.getString(3));
+            c.setDescripcion2(resultado.getString(4));
+            c.setPrecio(resultado.getFloat(5));
+            c.setDescuento(resultado.getFloat(6));
+            c.setIdtipo(resultado.getInt(7));
+            c.setIdcategorias(resultado.getInt(8));
+            c.setImagen(resultado.getString(9));
+            c.setStock(resultado.getInt(10));
+            c.setRate(resultado.getFloat(11));
+            listaItems.add(c);
+        }
+        cerrarConexion();
+    }
+
     public void obtenerItems(int id, String busca) throws SQLException {
         listaItems.clear();
         abrirConexion();
         sentencia = conexion.prepareStatement("select * from items where idtipo=? and nombre like ? order by idcategorias");
         sentencia.setInt(1, id);
         sentencia.setString(2, busca + "%");
+
         resultado = sentencia.executeQuery();
         while (resultado.next()) {
             Items c = new Items();
@@ -173,11 +228,41 @@ public class ItemsDAO extends ConexionMySQL {
         cerrarConexion();
     }
 
+    public Items obtenerItem(int idtem, String nombreu) throws SQLException {
+        Items c = null;
+        abrirConexion();
+        sentencia = conexion.prepareStatement("select * from items where iditem=? and nombreusuario=?");
+        sentencia.setInt(1, idtem);
+        sentencia.setString(2, nombreu);
+        resultado = sentencia.executeQuery();
+        if (resultado.next()) {
+            c = new Items();
+            c.setIditem(resultado.getInt(1));
+            c.setNombre(resultado.getString(2));
+            c.setDescripcion(resultado.getString(3));
+            c.setDescripcion2(resultado.getString(4));
+            c.setPrecio(resultado.getFloat(5));
+            c.setDescuento(resultado.getFloat(6));
+            c.setIdtipo(resultado.getInt(7));
+            c.setIdcategorias(resultado.getInt(8));
+            Categorias ca = new CategoriasDAO().obtenerCategoria(resultado.getInt(8));
+
+            c.getCategorias().setCategorias(ca.getCategorias());
+            c.getCategorias().setDescripcion(ca.getDescripcion());
+            c.setImagen(resultado.getString(9));
+            c.setStock(resultado.getInt(10));
+            c.setRate(resultado.getFloat(11));
+        }
+        cerrarConexion();
+        return c;
+    }
+
     public Items obtenerItem(int idtem) throws SQLException {
         Items c = null;
         abrirConexion();
-        sentencia = conexion.prepareStatement("select * from items where iditem=? order by idcategorias");
+        sentencia = conexion.prepareStatement("select * from items where iditem=?");
         sentencia.setInt(1, idtem);
+
         resultado = sentencia.executeQuery();
         if (resultado.next()) {
             c = new Items();

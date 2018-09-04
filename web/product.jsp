@@ -43,10 +43,10 @@
         <!-- Title Page -->
         <section class="bg-title-page p-t-50 p-b-40 flex-col-c-m" style="background-image: url(images/heading-pages-02.jpg);">
             <h2 class="l-text2 t-center text-primary">
-                Hotel
+                Productos
             </h2>
             <p class="m-text13 t-center text-primary" >
-                Las mejores habitaciones
+                Los mejores del mercado
             </p>
         </section>
 
@@ -90,14 +90,16 @@
                                     <div class="block2">
                                         <div class="block2-img wrap-pic-w of-hidden pos-relative ">
                                             <img src="images/<s:property value="imagen"/>" alt="IMG-PRODUCT">
-
+                                            <s:url action="detalle" var="detalle">
+                                                <s:param name="producto"><s:property value="iditem"/></s:param>
+                                            </s:url>
                                             <div class="block2-overlay trans-0-4">
 
 
                                                 <div class="block2-btn-addcart w-size1 trans-0-4">
                                                     <!-- Button -->
                                                     <s:if test="#user!=null">
-                                                        <s:if test="#user.idperfil==1">
+                                                        <s:if test="evento==1">
                                                             <s:url action="act" var="actualizar">
                                                                 <s:param name="producto"><s:property value="iditem"/></s:param>
                                                             </s:url>
@@ -108,26 +110,26 @@
                                                             <s:a href="%{eliminar}" cssClass="btn btn-danger btn-xs"><i class="fa fa-trash"></i></s:a>
                                                         </s:if>
                                                         <s:else>
-                                                            <button class="add flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-                                                                Añadir al carrito
-                                                            </button>
-                                                            <button class="rem flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4" style="display:  none">
-                                                                Eliminar 
-                                                            </button>
+                                                            <s:a href="%{detalle}" cssClass="add flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
+                                                                Comprar
+                                                            </s:a>                                                            
                                                             <input type="hidden" value="<s:property value="iditem"/>" class="iditem"/>
                                                         </s:else>
                                                     </s:if>
-
-
-
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="block2-txt p-t-20">
-                                            <a href="product-detail.jsp" class="block2-name dis-block s-text3 p-b-5">
+                                            <s:if test="evento==1">                                                 
+                                                <s:property value="nombre"/>                                             
+                                            </s:if>
+                                            <s:else>
+                                                 <s:a href="%{detalle}" cssClass="block2-name dis-block s-text3 p-b-5">
                                                 <s:property value="nombre"/>
-                                            </a>
+                                            </s:a>
+                                            </s:else>
+                                           
                                             <s:if test="%{descuento>0}">
                                                 <span class="block2-oldprice m-text7 p-r-5">
                                                     <s:property value="precio"/>
@@ -226,100 +228,7 @@
         <!--===============================================================================================-->
         <script type="text/javascript" src="vendor/sweetalert/sweetalert.min.js"></script>
         <script type="text/javascript">
-            var redirect = $('.redireccion');
-            redirect.val(3);
-            var ul = $(".header-cart ul");
-            var cart = $(".cart");
-            $('.block2-btn-addcart').each(function () {
-
-                var nameProduct = $(this).parent().parent().parent().find('.block2-name').html();
-
-                $(this).find(".add").on('click', function () {
-
-                    var boton = $(this);
-                    var boton2 = $(this).parent().find('.rem');
-
-
-
-
-
-                    var iditem = $(this).parent().find('input:hidden');
-
-                    var item = {
-                        "items": {
-                            "iditem": iditem.val()
-                        }};
-                     
-
-                    $.ajax({
-                        url: "add_to_cart",
-                        data: JSON.stringify(item),
-                        dataType: 'json',
-                        contentType: 'application/json',
-                        type: 'POST',
-                        async: true,
-                        success: function (res) {
-                            var p = res.items;
-                            cart.html(res.cantidad);
-                            ul.append("<li class='header-cart-item'>" +
-                                    "<div class='header-cart-item-img'>" +
-                                    "<img src='images/" + p.imagen + "' alt='IMG'>" +
-                                    "</div>" +
-                                    "<div class='header-cart-item-txt'>" +
-                                    "<a href='#' class='header-cart-item-name'>" +
-                                    "" + p.nombre +
-                                    "</a>" +
-                                    "<span class='header-cart-item-info'>" +
-                                    "1 x $" + p.precio +
-                                    "</span>" +
-                                    "</div>" +
-                                    "</li>");
-                            boton.css("display", "none");
-                            boton2.css("display", "block");
-
-                        }
-                    });
-                    swal(nameProduct, "Añadido al carrito !", "success");
-                });
-
-
-
-                $(this).find(".rem").on('click', function () {
-                    var boton2 = $(this).parent().find('.add');
-                    var boton = $(this);
-                    if (confirm('Seguro que deseas eliminar')) {
-                        var iditem = $(this).parent().find('input:hidden');
-                        var item = {
-                            "items": {
-                                "iditem": iditem.val()
-                            }};
-                        $.ajax({
-                            url: "del_to_car",
-                            data: JSON.stringify(item),
-                            dataType: 'json',
-                            contentType: 'application/json',
-                            type: 'POST',
-                            async: true,
-                            success: function (res) {
-                                cart.html(res.cantidad);
-                                boton.css("display", "none");
-                                boton2.css("display", "block");
-                            }
-                        });
-
-
-                    }
-                });
-
-
-            });
-
-            $('.block2-btn-addwishlist').each(function () {
-                var nameProduct = $(this).parent().parent().parent().find('.block2-name').html();
-                $(this).on('click', function () {
-                    swal(nameProduct, "is added to wishlist !", "success");
-                });
-            });
+          
         </script>
 
         <!--===============================================================================================-->

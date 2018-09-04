@@ -19,6 +19,7 @@ public class Items implements Serializable {
     private int iditem;
     private int stock;
     private String nombre;
+    private String nombreusuario;
     private String descripcion;
     private String descripcion2;
     private float precio;
@@ -63,9 +64,25 @@ public class Items implements Serializable {
         return iditem;
     }
 
+    public String getNombreusuario() {
+        return nombreusuario;
+    }
+
+    public void setNombreusuario(String nombreusuario) {
+        this.nombreusuario = nombreusuario;
+    }
+
+    
+    
+    
     public void setIditem(int iditem) {
         this.iditem = iditem;
     }
+    
+      public void setIditem(String iditem) {
+        this.iditem = Integer.parseInt(iditem);
+    }
+
 
     public String getNombre() {
         return nombre;

@@ -21,7 +21,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
- 
+
 /**
  *
  * @author JOSE-MA
@@ -33,10 +33,14 @@ public class ReservasDAO extends ConexionMySQL {
 
     public ReservasDAO() {
     }
-        public void insertarReservas(Reservas re) throws SQLException {
+
+    public void insertarReservas(Reservas re) throws SQLException {
         abrirConexion();
-        sentencia = conexion.prepareCall("INSERT into reservaciones(nombreusuario) values (?)");
-        sentencia.setString(1, re.getNombreusuario());        
+        sentencia = conexion.prepareCall("INSERT into reservaciones(nombreusuario,iditem,total,original) values (?,?,?,?)");
+        sentencia.setString(1, re.getNombreusuario());
+        sentencia.setInt(2, re.getIditem());
+        sentencia.setFloat(3, re.getTotal());
+        sentencia.setFloat(4, re.getOriginal());
         sentencia.executeUpdate();
         cerrarConexion();
     }
@@ -79,7 +83,7 @@ public class ReservasDAO extends ConexionMySQL {
         }
         procedimiento = conexion.prepareCall("{call actualizarTotal(?)}");
         procedimiento.setLong(1, re.getIdreserva());
-        generarReporte(re.getIdreserva(), ruta, "reserva",2);
+        generarReporte(re.getIdreserva(), ruta, "reserva", 2);
         procedimiento.executeUpdate();
         cerrarConexion();
     }
@@ -144,21 +148,20 @@ public class ReservasDAO extends ConexionMySQL {
 
     }
 
-    
-    public boolean isReserva(Reservas reserva) throws SQLException{
-        boolean b= false;
+    public boolean isReserva(Reservas reserva) throws SQLException {
+        boolean b = false;
         abrirConexion();
-        procedimiento= conexion.prepareCall("{call isReserva(?,?)}");
+        procedimiento = conexion.prepareCall("{call isReserva(?,?)}");
 //        procedimiento.setDate(1, reserva.getFecha());
 //        procedimiento.setTime(2, reserva.getHora());
-        resultado=procedimiento.executeQuery();
-        if(resultado.next()){
-            b= resultado.getBoolean(1);
+        resultado = procedimiento.executeQuery();
+        if (resultado.next()) {
+            b = resultado.getBoolean(1);
         }
         cerrarConexion();
         return b;
     }
-    
+
     public void obtenerReservas(String nombreusuario) throws SQLException {
         listReservas.clear();
         abrirConexion();
@@ -169,7 +172,8 @@ public class ReservasDAO extends ConexionMySQL {
             Reservas re = new Reservas();
             re.setIdreserva(resultado.getLong(1));
             re.setNombreusuario(resultado.getString(2));
- re.setFecha(resultado.getString(3));
+            re.setFecha(resultado.getString(3));
+            re.setItem(new ItemsDAO().obtenerItem(resultado.getInt(6)));
 //            re.setHora(resultado.getString(4));
 //            re.setTotal(resultado.getFloat(5));
 //            re.setDetalle("Reservacion " + re.getFechas() + "- " + re.getHora());
@@ -177,17 +181,18 @@ public class ReservasDAO extends ConexionMySQL {
         }
         cerrarConexion();
     }
-    
+
     public void obtenerReservas2() throws SQLException {
         listReservas.clear();
         abrirConexion();
-        sentencia = conexion.prepareStatement("select * from reservaciones order by fecha");       
+        sentencia = conexion.prepareStatement("select * from reservaciones order by fecha");
         resultado = sentencia.executeQuery();
         while (resultado.next()) {
             Reservas re = new Reservas();
             re.setIdreserva(resultado.getLong(1));
             re.setNombreusuario(resultado.getString(2));
- re.setFecha(resultado.getString(3));
+            re.setFecha(resultado.getString(3));
+            re.setItem(new ItemsDAO().obtenerItem(resultado.getInt(6)));
 //            re.setHora(resultado.getString(4));
 //            re.setTotal(resultado.getFloat(5));
 //            re.setDetalle("Reservacion " + re.getFechas() + "- " + re.getHora());
@@ -195,17 +200,22 @@ public class ReservasDAO extends ConexionMySQL {
         }
         cerrarConexion();
     }
+
     public void obtenerReservas3(String nom) throws SQLException {
         listReservas.clear();
         abrirConexion();
-        sentencia = conexion.prepareStatement("select * from reservaciones where nombreusuario=? order by fecha");      
+        sentencia = conexion.prepareStatement("select * from reservaciones where nombreusuario=? order by fecha");
         sentencia.setString(1, nom);
         resultado = sentencia.executeQuery();
         while (resultado.next()) {
             Reservas re = new Reservas();
             re.setIdreserva(resultado.getLong(1));
             re.setNombreusuario(resultado.getString(2));
- re.setFecha(resultado.getString(3));
+            re.setFecha(resultado.getString(3));
+            re.setEstado(resultado.getString(4));
+            re.setOriginal(resultado.getFloat(7));
+            re.setTotal(resultado.getFloat(5));
+            re.setItem(new ItemsDAO().obtenerItem(resultado.getInt(6)));
 //            re.setHora(resultado.getString(4));
 //            re.setTotal(resultado.getFloat(5));
 //            re.setDetalle("Reservacion " + re.getFechas() + "- " + re.getHora());
@@ -213,8 +223,32 @@ public class ReservasDAO extends ConexionMySQL {
         }
         cerrarConexion();
     }
+
+    public void obtenerReservas4(String nom) throws SQLException {
+        listReservas.clear();
+        abrirConexion();
+        sentencia = conexion.prepareStatement("select * from reservaciones where nombreusuario<>? order by fecha");
+        sentencia.setString(1, nom);
+        resultado = sentencia.executeQuery();
+        while (resultado.next()) {
+            Reservas re = new Reservas();
+            re.setIdreserva(resultado.getLong(1));
+            re.setNombreusuario(resultado.getString(2));
+            re.setFecha(resultado.getString(3));
+            re.setEstado(resultado.getString(4));
+            re.setOriginal(resultado.getFloat(7));
+            re.setTotal(resultado.getFloat(5));
+            re.setItem(new ItemsDAO().obtenerItem(resultado.getInt(6)));
+//            re.setHora(resultado.getString(4));
+//            re.setTotal(resultado.getFloat(5));
+//            re.setDetalle("Reservacion " + re.getFechas() + "- " + re.getHora());
+            listReservas.add(re);
+        }
+        cerrarConexion();
+    }
+
     public void eliminar(long id) throws SQLException {
-         
+
         abrirConexion();
         sentencia = conexion.prepareStatement("delete from reservaciones where idreserva=?");
         sentencia.setLong(1, id);
@@ -222,8 +256,20 @@ public class ReservasDAO extends ConexionMySQL {
 //            re.setHora(resultado.getString(4));
 //            re.setTotal(resultado.getFloat(5));
 //            re.setDetalle("Reservacion " + re.getFechas() + "- " + re.getHora());
-           
-       
+
+        cerrarConexion();
+    }
+    public void actualizar(long id,String estado) throws SQLException {
+
+        abrirConexion();
+        sentencia = conexion.prepareStatement("update reservaciones set estado=? where idreserva=?");
+        sentencia.setString(1, estado);
+        sentencia.setLong(2, id);
+        sentencia.executeUpdate();
+//            re.setHora(resultado.getString(4));
+//            re.setTotal(resultado.getFloat(5));
+//            re.setDetalle("Reservacion " + re.getFechas() + "- " + re.getHora());
+
         cerrarConexion();
     }
 
@@ -237,7 +283,7 @@ public class ReservasDAO extends ConexionMySQL {
             Reservas re = new Reservas();
             re.setIdreserva(resultado.getLong(1));
             re.setNombreusuario(resultado.getString(2));
- re.setFecha(resultado.getString(3));
+            re.setFecha(resultado.getString(3));
 //            re.setTotal(resultado.getFloat(4));
 //            re.setDetalle("Compras " + re.getFechas());
             listReservas.add(re);
@@ -290,7 +336,7 @@ public class ReservasDAO extends ConexionMySQL {
             re = new Reservas();
             re.setIdreserva(resultado.getLong(1));
             re.setNombreusuario(resultado.getString(2));
- re.setFecha(resultado.getString(3));
+            re.setFecha(resultado.getString(3));
 //            re.setTotal(resultado.getFloat(4));
 //            re.setDetalle("Compra numero " + re.getIdreserva() + ", de la fecha: " + re.getFechas());
         }

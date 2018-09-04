@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import modelo.DetalleCompra;
-import modelo.EnviarMensaje; 
+import modelo.EnviarMensaje;
 import modelo.Items;
 import modelo.ItemsDAO;
 import modelo.Reservas;
@@ -27,7 +27,7 @@ import modelo.UsuariosDAO;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.struts2.ServletActionContext;
 
-/** 
+/**
  *
  * @author JOSE
  */
@@ -69,20 +69,31 @@ public class Carrito extends ActionSupport implements ModelDriven<Items> {
         return SUCCESS;
     }
     private String usuario;
+    private float precios;
 
-        public String insertar3() {
-       
-         
+    public float getPrecios() {
+        return precios;
+    }
+
+    public void setPrecios(float precios) {
+        this.precios = precios;
+    }
+
+    public String insertar3() {
+
         ReservasDAO re = new ReservasDAO();
         try {
-            Reservas res=new Reservas();
-            res.setNombreusuario(usuario);     
-            re.insertarReservas(res);           
+            Reservas res = new Reservas();
+            res.setNombreusuario(usuario);
+            res.setIditem(items.getIditem());
+            res.setTotal(precios);
+            res.setOriginal(items.getPrecio());
+            re.insertarReservas(res);
             session.setAttribute("listaItems", listaItems);
             session.setAttribute("cantidadSer", 0);
             session.setAttribute("reserva", null);
             session.setAttribute("cantidad", 0);
-            mensaje="Reserva realizada";
+            mensaje = "Reserva realizada";
         } catch (SQLException ex) {
             Logger.getLogger(Carrito.class.getName()).log(Level.SEVERE, null, ex);
             mensaje = ex.getMessage();
@@ -90,8 +101,7 @@ public class Carrito extends ActionSupport implements ModelDriven<Items> {
         }
         return SUCCESS;
     }
-    
-    
+
     public String add_to_cart() {
         System.out.println(items.getIditem());
         esRepetido = false;

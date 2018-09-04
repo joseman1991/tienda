@@ -55,11 +55,16 @@
             <result name="error"> error.jsp</result>            
         </action>  
         
+        <action name="detalle" class="controlador.Producto" >
+            <result name="success">product-detail_2.jsp</result>
+            <result name="error"> error.jsp</result>            
+        </action>  
+        
         <action name="insertProducto" class="controlador.Producto" method="insertarProducto">
             <result name="success" type="redirectAction">
-                 <param name="actionName">categorias</param>
+                <param name="actionName">categorias</param>
                 <param name="mensaje">${mensaje}</param>
-                </result>
+            </result>
             <result name="error"> error.jsp</result>            
         </action>  
         
@@ -78,9 +83,9 @@
         
         <action name="eliproducto" class="controlador.Producto" method="eliminarProducto">
             <result name="success" type="redirectAction">
-                  <param name="actionName">tienda</param>
+                <param name="actionName">tienda</param>
                 <param name="mensaje">${mensaje}</param>
-                </result>
+            </result>
             <result name="error"> error.jsp</result>            
         </action>  
         
@@ -91,11 +96,22 @@
             <result name="error"> error.jsp</result>            
         </action>  
         
+       
+         <action name="tienda1" class="controlador.Producto" method="obtenerLista2">
+            <result name="success">product.jsp</result>
+            <result name="error"> error.jsp</result>            
+        </action>  
         
+         <action name="tienda2" class="controlador.Producto" method="obtenerLista3">
+            <result name="success">product.jsp</result>
+            <result name="error"> error.jsp</result>            
+        </action>  
+         
         <action name="reservas" class="controlador.ReservaAction" method="listas">
             <result name="success">reservas.jsp</result>
             <result name="error"> error.jsp</result>            
-        </action>  
+        </action>
+          
         <action name="reservas1" class="controlador.ReservaAction" method="listas2">
             <result name="success">reservas.jsp</result>
             <result name="error"> error.jsp</result>            
@@ -106,11 +122,23 @@
             <result name="error"> error.jsp</result>            
         </action>  
         
-        <action name="reserv" class="controlador.Carrito" method="insertar3">
-            <result name="success" type="redirectAction">reservas1</result>
+        <action name="ofert" class="controlador.ReservaAction" method="actua">
+            <result name="success" type="redirectAction">
+                <param name="actionName">reservas1</param>
+                <param name="mensaje">${mensaje}</param>
+                <param name="nombreusuario">${usuario}</param>                
+            </result>
             <result name="error"> error.jsp</result>            
         </action>  
         
+        <action name="reserv" class="controlador.Carrito" method="insertar3">
+            <result name="success" type="redirectAction">
+                <param name="actionName">reservas1</param>
+                <param name="mensaje">${mensaje}</param>
+                <param name="nombreusuario">${usuario}</param>
+            </result>
+            <result name="error"> error.jsp</result>            
+        </action>         
         
     </package>
     

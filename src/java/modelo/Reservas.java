@@ -17,7 +17,11 @@ public class Reservas implements Serializable {
     private String detalle;
     private String nombreusuario;
     private String correo;
-    
+    private int iditem;
+    private Items item;
+    private float total;
+    private float original;
+    private String estado;
     private String fecha;
  
 
@@ -28,6 +32,22 @@ public class Reservas implements Serializable {
         correo = "";
     
         
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public float getTotal() {
+        return total;
+    }
+
+    public void setTotal(float total) {
+        this.total = total;
     }
 
  
@@ -45,6 +65,14 @@ public class Reservas implements Serializable {
 
     public void setNombreusuario(String nombreusuario) {
         this.nombreusuario = nombreusuario;
+    }
+
+    public float getOriginal() {
+        return original;
+    }
+
+    public void setOriginal(float original) {
+        this.original = original;
     }
 
     
@@ -80,5 +108,23 @@ public class Reservas implements Serializable {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
+
+    public int getIditem() {
+        return iditem;
+    }
+
+    public void setIditem(int iditem) {
+        this.iditem = iditem;
+    }
+
+    public Items getItem() {
+        return item;
+    }
+
+    public void setItem(Items item) {
+        this.item = item;
+    }
+    
+    
 
 }

@@ -13,13 +13,20 @@
     <s:set name="cant" value="#session['cantidad']"/>
     <body>
         <s:url action="Bienvenido" var="index"/>
-        <s:url action="reservas" var="reservas"/>
+        <s:url action="reservas" var="reservas">
+            <s:param name="nombreusuario">
+                <s:property value="#user.nombreusuario"/>
+            </s:param>
+        </s:url>
         <s:url action="reservas1" var="reservas1">
             <s:param name="nombreusuario">
                 <s:property value="#user.nombreusuario"/>
             </s:param>
         </s:url>
-        <s:url action="tienda" var="pro" >
+        <s:url action="tienda1" var="pro" >
+            <s:param name="page">1</s:param>
+        </s:url>
+        <s:url action="tienda2" var="pro2" >
             <s:param name="page">1</s:param>
         </s:url>
         <meta url="<s:url action="actu" var="actu" includeParams="none" >
@@ -52,31 +59,46 @@
                                 <li>
                                     <a href="<s:property value="#pro"/>">Productos</a>
                                     <s:if test="#user!=null">
-                                        
-                                            <s:if test="#user.idperfil==1"><ul class="sub_menu">
+                                        <s:if test="#user.idperfil==1"><ul class="sub_menu">
                                                 <s:url action="categorias" var="cat"/>
-                                                <li><s:a href="%{cat}">Agregar producto</s:a></li>
-                                               
-                                          
-                                    </ul>  </s:if> </s:if>
+                                                <li>
+                                                    <s:a href="%{cat}">Agregar producto</s:a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="<s:property value="#pro2"/>">Mis Productos</a>                                    
+                                                </li>
+                                                    <li>
+                                                        <a href="<s:property value="#pro"/>">Tienda</a>                                    
+                                                </li>
+
+                                            </ul>  
+                                        </s:if> 
+                                    </s:if>
                                 </li>
+
 
 
                                 <s:if test="#user!=null">
                                     <li>
+                                        Movimientos
+                                        <ul class="sub_menu">
+                                            <li>
+                                                <a href=" <s:property value="#reservas"/>">Ver mis ventas</a>
+                                            </li>
+
+                                            <li>
+                                                <a href=" <s:property value="#reservas1"/>">Ver mis compras</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
                                         <a href=" <s:property value="#actu"/>">Congiguracion de usuario</a>
                                     </li>
-                                    <s:if test="#user.idperfil==1">
-                                        <li>
-                                            <a href=" <s:property value="#reservas"/>">Ver compras de todos</a>
-                                        </li>
-                                    </s:if>
-                                    <s:else>
-                                        <li>
-                                            <a href=" <s:property value="#reservas1"/>">Ver compras</a>
-                                        </li>
 
-                                    </s:else>
+
+
+
 
 
                                 </s:if>
@@ -162,7 +184,7 @@
                                                 <div class="header-cart-wrapbtn">
                                                     <!-- Button -->
                                                     <button class="flex-c-m size1 bg1 bo-rad-20 hov1 s-text1 trans-0-4">
-                                                        Reservar
+                                                        Comprar
                                                     </button>
                                                 </div>
                                                 <input type="hidden" name="usuario" value="<s:property value="#user.nombreusuario"/>"/>

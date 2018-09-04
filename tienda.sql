@@ -28,11 +28,11 @@ create table usuarios(
  foto character varying (50)  default 'client_01.jpg',
  direccion character varying (100) not null,
  dni character varying (50) not null,
- idperfil int not null default 2
+ idperfil int not null default 1
 );
 
 insert into usuarios values('admin','123456','Admin','','Admin','','ym@gmail.com','jpg','BABAHOYO','1234567890',1);
-insert into usuarios values('user','123456','User','','user','','y3m@gmail.com','jpg','BABAHOYO','1234567890',2);
+insert into usuarios values('user','123456','User','','user','','y3m@gmail.com','jpg','BABAHOYO','1234567890',1);
 
 
 
@@ -73,21 +73,23 @@ create table items(
  idcategorias int not null references categorias on update cascade on delete restrict,
  imagen character varying(50),
  stock int,
- rate float default 0
+ rate float default 0,
+ nombreusuario character varying(16)
 );
 
 
-insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate) values(default,'Maleta negra','Algo','Algo2',75.00,0.00,1,1,'item-02.jpg',5,default);
-insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate) values(default,'Chaqueta azul','Algo','Algo2',36.50,0,1,1,'item-03.jpg',5,default);
-insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate) values(default,'Reloj delgado negro','Algo','Algo2',165.90,0,1,1,'item-cart-05.jpg',5,default);
-insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate) values(default,'Shorts femenino azul','Algo','Algo2',29.50,40,1,1,'item-07.jpg',5,default);
+insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate,nombreusuario) values(default,'Maleta negra','Algo','Algo2',75.00,0.00,1,1,'item-02.jpg',5,default,'user');
+insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate,nombreusuario) values(default,'Chaqueta azul','Algo','Algo2',36.50,0,1,1,'item-03.jpg',5,default,'user');
+insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate,nombreusuario) values(default,'Reloj delgado negro','Algo','Algo2',165.90,0,1,1,'item-cart-05.jpg',5,default,'user');
+insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate,nombreusuario) values(default,'Shorts femenino azul','Algo','Algo2',29.50,40,1,1,'item-07.jpg',5,default,'user');
 
 
 
-insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate)values(default,'Zapato converts','Algo','Algo2',75.00,0,1,1,'item-17.jpg',5,default);
-insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate)values(default,'Reloj Nixon','Algo','Algo2',36.50,0,1,1,'item-09.jpg',5,default);
-insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate) values(default,'Buzzo medio blanco','Algo','Algo2',165.90,0,1,1,'item-14.jpg',5,default);
-insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate) values(default,'Chaqueta Jeans','Algo','Algo2',29.50,45,1,1,'item-04.jpg',5,default);
+insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate,nombreusuario)values(default,'Zapato converts','Algo','Algo2',75.00,0,1,1,'item-17.jpg',5,default,'admin');
+insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate,nombreusuario)values(default,'Reloj Nixon','Algo','Algo2',36.50,0,1,1,'item-09.jpg',5,default,'admin');
+insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate,nombreusuario) values(default,'Buzzo medio blanco','Algo','Algo2',165.90,0,1,1,'item-14.jpg',5,default,'admin');
+insert into items(iditem,nombre,descripcion,descripcion2,precio,descuento,idtipo,idcategorias,imagen,stock,rate,nombreusuario) values(default,'Chaqueta Jeans','Algo','Algo2',29.50,45,1,1,'item-04.jpg',5,default,'admin');
+
 
 select * from items;
 
@@ -120,7 +122,9 @@ create table reservaciones(
  nombreusuario character varying(16) references usuarios on update cascade on delete restrict, 
  fecha TIMESTAMP not null default CURRENT_TIMESTAMP,
  estado VARCHAR(1) default 'E',
- total float default 0
+ total float default 0,
+ iditem int not null,
+ original float default 0
 );
 
 
@@ -149,3 +153,15 @@ create table detalleventa(
  iva float not null default 12
 );
 
+SET GLOBAL log_bin_trust_function_creators = 1;
+DROP FUNCTION IF EXISTs insertarventa;
+DELIMITER //
+CREATE  FUNCTION insertarventa(nombre varchar(50)) RETURNS bigint  
+  begin   
+    declare id bigint default 1;   
+   insert into ventas(idventa, nombreusuario,fecha) values(default,nombre,default);
+   select last_insert_id() into id; 
+   return id;
+  end
+//
+ 

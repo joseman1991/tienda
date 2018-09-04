@@ -25,6 +25,7 @@ public class ReservaAction extends ActionSupport implements ModelDriven<Reservas
     private List<Reservas> lista;
     ArrayList<DetalleCompra> listaDetalleCompra;
     private boolean reservado;
+    private String usuario;
 
     public ReservaAction() {
         reservas = new Reservas();
@@ -34,6 +35,14 @@ public class ReservaAction extends ActionSupport implements ModelDriven<Reservas
     public String reservar() {
         session.setAttribute("reserva", reservas);
         return SUCCESS;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public String eliminar() {
@@ -69,11 +78,22 @@ public class ReservaAction extends ActionSupport implements ModelDriven<Reservas
         return SUCCESS;
     }
 
+    private String evento;
+
+    public String getEvento() {
+        return evento;
+    }
+
+    public void setEvento(String evento) {
+        this.evento = evento;
+    }
+
     public String lista() {
         lista = new ArrayList<>();
         ReservasDAO rdao = new ReservasDAO(lista);
         try {
             rdao.obtenerReservas(reservas.getNombreusuario());
+            evento = "c";
         } catch (SQLException e) {
             mensaje = e.getMessage();
             return ERROR;
@@ -86,38 +106,39 @@ public class ReservaAction extends ActionSupport implements ModelDriven<Reservas
         ReservasDAO rdao = new ReservasDAO(lista);
         try {
             rdao.obtenerCompras(reservas.getNombreusuario());
+            evento = "c";
         } catch (SQLException e) {
             mensaje = e.getMessage();
             return ERROR;
         }
         return SUCCESS;
     }
-    
+
     public String listas() {
         lista = new ArrayList<>();
         ReservasDAO rdao = new ReservasDAO(lista);
         try {
-            rdao.obtenerReservas2();
+            rdao.obtenerReservas4(reservas.getNombreusuario());
+             evento = "v";
         } catch (SQLException e) {
             mensaje = e.getMessage();
             return ERROR;
         }
         return SUCCESS;
     }
-    
+
     public String listas2() {
         lista = new ArrayList<>();
         ReservasDAO rdao = new ReservasDAO(lista);
         try {
             rdao.obtenerReservas3(reservas.getNombreusuario());
+            evento = "c";
         } catch (SQLException e) {
             mensaje = e.getMessage();
-            return ERROR;
+            return SUCCESS;
         }
         return SUCCESS;
     }
-    
-    
 
     public String ListDetalle() {
         listaDetalleCompra = new ArrayList<>();
@@ -148,14 +169,32 @@ public class ReservaAction extends ActionSupport implements ModelDriven<Reservas
         }
         return SUCCESS;
     }
+
     public String elim() {
-       
+
         ReservasDAO rdao = new ReservasDAO(listaDetalleCompra);
-        try {            
+        try {
             rdao.eliminar(reservas.getIdreserva());
             session.setAttribute("listaItems2", listaDetalleCompra);
             session.setAttribute("reserva2", reservas);
             session.setAttribute("insert", 0);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            mensaje = e.getMessage();
+            return ERROR;
+        }
+        return SUCCESS;
+    }
+
+    public String actua() {
+        ReservasDAO rdao = new ReservasDAO(listaDetalleCompra);
+        try {
+            System.out.println("estado " + reservas.getEstado());
+            rdao.actualizar(reservas.getIdreserva(), reservas.getEstado());
+            session.setAttribute("listaItems2", listaDetalleCompra);
+            session.setAttribute("reserva2", reservas);
+            session.setAttribute("insert", 0);
+            mensaje = "compra actualizado";
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             mensaje = e.getMessage();

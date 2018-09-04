@@ -21,6 +21,7 @@ import modelo.Items;
 import modelo.ItemsDAO;
 import modelo.Opinion;
 import modelo.OpinionDAO;
+import modelo.Usuarios;
 import org.apache.struts2.ServletActionContext;
 
 /**
@@ -61,7 +62,7 @@ public class Producto extends ActionSupport implements ModelDriven<Items> {
         try {
             con = idao.getConexion();
             con.setAutoCommit(false);
-            idao.insertarProducto(item,con);
+            idao.insertarProducto(item, con);
             mensaje = "Producto añadido";
         } catch (SQLException e) {
             if (con != null) {
@@ -79,7 +80,7 @@ public class Producto extends ActionSupport implements ModelDriven<Items> {
             if (con != null) {
                 try {
                     con.commit();
-                   imgdao.obtenerImagenes(item.getIditem());
+                    imgdao.obtenerImagenes(item.getIditem());
                     con.close();
                 } catch (SQLException ex) {
                     System.out.println(ex.getMessage());
@@ -111,9 +112,9 @@ public class Producto extends ActionSupport implements ModelDriven<Items> {
             int re = idao.actualizarProducto(item);
             if (re > 0) {
                 item = idao.obtenerItem(item.getIditem());
-                imgdao.obtenerImagenes(producto);                
+                imgdao.obtenerImagenes(producto);
                 mensaje = "producto actualizado";
-                producto=item.getIditem();
+                producto = item.getIditem();
                 return SUCCESS;
             } else {
                 mensaje = "ocurrió un error";
@@ -163,7 +164,7 @@ public class Producto extends ActionSupport implements ModelDriven<Items> {
             return ERROR;
         } catch (IOException ex) {
             Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
-             return ERROR;
+            return ERROR;
         }
     }
 
@@ -180,12 +181,13 @@ public class Producto extends ActionSupport implements ModelDriven<Items> {
             return ERROR;
         } catch (IOException ex) {
             Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
-             return ERROR;
+            return ERROR;
         }
     }
 
     public String obtenerLista() {
         try {
+
             item = idao.obtenerItem(producto);
             idao.obtenerItems(1, "");
             imgdao.obtenerImagenes(producto);
@@ -197,7 +199,65 @@ public class Producto extends ActionSupport implements ModelDriven<Items> {
             return ERROR;
         } catch (IOException ex) {
             Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
-             return ERROR;
+            return ERROR;
+        }
+    }
+
+    private int evento;
+
+    public int getEvento() {
+        return evento;
+    }
+
+    public void setEvento(int evento) {
+        this.evento = evento;
+    }
+
+    public String obtenerLista2() {
+        try {
+            evento = 2;
+            Usuarios u = (Usuarios) session.getAttribute("usuario");
+            if (u != null) {
+                item = idao.obtenerItem(producto, u.getNombreusuario());
+                idao.obtenerItems2(1, "", u.getNombreusuario());
+            } else {
+                item = idao.obtenerItem(producto);
+                idao.obtenerItems(1, "");
+            }
+            imgdao.obtenerImagenes(producto);
+            session.setAttribute("lista", listaProductos);
+            return SUCCESS;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            mensaje = e.getMessage();
+            return ERROR;
+        } catch (IOException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+            return ERROR;
+        }
+    }
+
+    public String obtenerLista3() {
+        try {
+            evento = 1;
+            Usuarios u = (Usuarios) session.getAttribute("usuario");
+            if (u != null) {
+                item = idao.obtenerItem(producto, u.getNombreusuario());
+                idao.obtenerItems(1, "", u.getNombreusuario());
+            } else {
+                item = idao.obtenerItem(producto);
+                idao.obtenerItems(1, "");
+            }
+            imgdao.obtenerImagenes(producto);
+            session.setAttribute("lista", listaProductos);
+            return SUCCESS;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            mensaje = e.getMessage();
+            return ERROR;
+        } catch (IOException ex) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+            return ERROR;
         }
     }
 
